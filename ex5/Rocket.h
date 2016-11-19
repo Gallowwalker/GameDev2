@@ -4,31 +4,25 @@
 #include "GameObject.h"
 
 #include <irrlicht.h>
-#include "driverChoice.h"
 
 using namespace irr;
 using namespace core;
-using namespace scene;
 using namespace video;
-using namespace io;
-using namespace gui;
 
 class Rocket : public GameObject {
 public:
     Rocket();
-	Rocket(IrrlichtDevice* device, IVideoDriver* driver);
+	Rocket(IrrlichtDevice* device, IVideoDriver* driver, u32 lastAnimationFrame);
     Rocket(const Rocket& orig);
     virtual ~Rocket();
 
-	void create() override;
 	void draw() override;
 	void animate(u32 currentTime) override;
 
 private:
 	int currentRowFrame = 0;
 	int currentColumnFrame = 0;
-
-	u32 lastAnimationFrame = this->device->getTimer()->getTime();
+	u32 lastAnimationFrame = 0;
 
 	IrrlichtDevice* device = NULL;
 	IVideoDriver* driver = NULL;

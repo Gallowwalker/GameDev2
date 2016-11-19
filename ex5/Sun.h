@@ -4,29 +4,24 @@
 #include "GameObject.h"
 
 #include <irrlicht.h>
-#include "driverChoice.h"
 
 using namespace irr;
 using namespace core;
-using namespace scene;
 using namespace video;
-using namespace io;
-using namespace gui;
 
 class Sun : public GameObject {
 public:
 	Sun();
-	Sun(IrrlichtDevice *device, IVideoDriver* driver);
+	Sun(IrrlichtDevice *device, IVideoDriver* driver, u32 lastAnimationFrame);
 	Sun(const Sun& orig);
 	virtual ~Sun();
 
-	void create() override;
 	void draw() override;
 	void animate(u32 currentTime) override;
 
 private:
 	int sunFrame = 0;
-	u32 lastAnimationFrame = this->device->getTimer()->getTime();
+	u32 lastAnimationFrame = 0;
 	//u32 currentTime = this->device->getTimer()->getTime();
 
 	IrrlichtDevice *device = NULL;

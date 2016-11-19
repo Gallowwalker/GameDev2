@@ -1,7 +1,4 @@
 #include <irrlicht.h>
-#include "driverChoice.h"
-#include "GameObject.h"
-#include "HUD.h"
 #include "HealthBar.h"
 #include "Rocket.h"
 #include "Sun.h"
@@ -38,7 +35,8 @@ int main()
 
 	
 	ITexture* backgroundTexture = driver->getTexture("./media/Backgrounds/awesome_space_galaxy_wallpaper_hd_8.jpg");
-	ITexture* rocketTexture = driver->getTexture("./media/Rocket_spritesheet.png");
+	ITexture* rocketTexture = driver->getTexture("./media/rocket_spritesheet.png");
+	ITexture* sunTexture = driver->getTexture("./media/sun_spritesheet.png");
 
 	// driver->makeColorKeyTexture(images, core::position2d<s32>(0,0));
 
@@ -54,24 +52,17 @@ int main()
 	driver->getMaterial2D().AntiAliasing=video::EAAM_FULL_BASIC;
 
 
-	//int sunX = 0;
-	//int sunY = 200;
-
-	//int sunFrameCount = 0;
-
-	//ITexture* sunTexture = driver->getTexture("./media/sun.png");  //independance frame rendering
-	
-	// need rocket
-
 	HUD* healthBar = new HealthBar(device, driver);
-	healthBar->create();
+
 	//healthBar->setHealthAmount(0);
 
-	//GameObject* sun = new Sun(device, driver);
-	//sun->create();
+	
 
-	GameObject* rocket = new Rocket(device, driver);
-	rocket->create();
+
+	u32 lastAnimationFrame = device->getTimer()->getTime();
+
+	GameObject* rocket = new Rocket(device, driver, lastAnimationFrame);
+	GameObject* sun = new Sun(device, driver, lastAnimationFrame);
 
 
 
@@ -81,9 +72,11 @@ int main()
 	u32 lastTime = 0;   //alt+ up and down
 	//u32 deltaTime = 0;
 
-	//u32 lastSunFrame = device->getTimer()->getTime();
-	//u32 sunFrame = 0;
-
+	u32 lastSunFrame = device->getTimer()->getTime();
+	u32 sunFrame = 0;
+	int currentColumnFrame = 0;
+	int currentRowFrame = 0;
+	
 
 	while(device->run() && driver)
 	{
@@ -94,19 +87,33 @@ int main()
 			currentTime = device->getTimer()->getTime();
 			////deltaTime = currentTime - lastTime;
 
-			//sun->animate(currentTime);
+			sun->animate(currentTime);
 			rocket->animate(currentTime);
 
 
-			//if (currentTime - lastSunFrame >= (1000 / 5))
-			//{
-			//	sunFrame++;
-			//	lastSunFrame = currentTime;
-			//}
-			//if (sunFrame >= 5)
-			//{
-			//	sunFrame = 0;
-			//}
+			/*if (currentTime - lastSunFrame >= (1000 / 5))
+			{
+				sunFrame++;
+				lastSunFrame = currentTime;
+			}
+			if (sunFrame >= 5)
+			{
+				sunFrame = 0;
+			}
+
+
+			if (currentTime - lastAnimationFrame >= (1000 / 60)) {
+				currentColumnFrame++;
+				lastAnimationFrame = currentTime;
+
+			}
+			if (currentColumnFrame >= 10) {
+				currentColumnFrame = 0;
+				currentRowFrame++;
+			}
+			if (currentRowFrame >= 6) {
+				currentRowFrame = 0;
+			}*/
 
 			
 
@@ -117,7 +124,7 @@ int main()
 			//(time / 1000 % 2) ? hud->setHealth(0) : hud->setHealth(150);
 			
 
-			driver->draw2DImage(rocketTexture, position2d<s32>(225, 140), rect<s32>(0, 0, 55, 83), 0, SColor(255, 255, 255, 255), true);
+			//driver->draw2DImage(rocketTexture, position2d<s32>(225, 140), rect<s32>((currentColumnFrame * 55), (currentRowFrame * 83), ((currentColumnFrame + 1) * 55), ((currentRowFrame + 1) * 83)), 0, SColor(255, 255, 255, 255), true);
 				
 
 			// rocket and sun class      abstract game object    functions for draw and animation
@@ -132,7 +139,7 @@ int main()
 			healthBar->draw();
 			rocket->draw();
 
-			//sun->draw();
+			sun->draw();
 
 			//// draw some text
 			//if (font)
@@ -163,6 +170,7 @@ int main()
 
 			driver->endScene();
 
+
 			lastTime = currentTime;
 			s32 fps = driver->getFPS();
 
@@ -182,7 +190,7 @@ int main()
 
 	//healthBar->destroy();
 	delete healthBar;
-	//delete sun;
+	delete sun;
 	delete rocket;
 
 	device->drop();

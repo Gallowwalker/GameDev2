@@ -4,9 +4,11 @@ Sun::Sun() {
 
 }
 
-Sun::Sun(IrrlichtDevice *device, IVideoDriver* driver) {
+Sun::Sun(IrrlichtDevice *device, IVideoDriver* driver, u32 lastAnimationFrame) {
 	this->device = device;
 	this->driver = driver;
+	this->sunTexture = this->driver->getTexture(this->sunTextureLocation);
+	this->lastAnimationFrame = lastAnimationFrame;
 }
 
 Sun::Sun(const Sun& orig) {
@@ -17,10 +19,6 @@ Sun::~Sun() {
 	this->device = NULL;
 	this->driver = NULL;
 	this->sunTexture = NULL;
-}
-
-void Sun::create() {
-	this->sunTexture = this->driver->getTexture(this->sunTextureLocation);
 }
 
 void Sun::draw() {

@@ -4,14 +4,10 @@
 #include "HUD.h"
 
 #include <irrlicht.h>
-#include "driverChoice.h"
 
 using namespace irr;
 using namespace core;
-using namespace scene;
 using namespace video;
-using namespace io;
-using namespace gui;
 
 class HealthBar : public HUD {
 public:
@@ -20,7 +16,6 @@ public:
 	HealthBar(const HealthBar& orig);
 	virtual ~HealthBar();
 
-	void create() override;
 	void draw() override;
 	/*void destroy() override;*/
 
@@ -28,7 +23,9 @@ public:
 	int getHealthAmount() const;
 
 private:
-	int healthAmount = 0;
+	/*int minimalHealthAmount = 0;
+	int maximalHealthAmount = 193;*/
+	int healthAmount = 193; //0 - min | 193 - max
 
 	IrrlichtDevice *device = NULL;
 	IVideoDriver* driver = NULL;
@@ -39,7 +36,7 @@ private:
 	stringw healthTextureLocation = "./media/health.png";
 	
 	rect<s32> healthBarDimentions = rect<s32>(0, 0, 221, 43);
-	rect<s32> healthDimensions = rect<s32>(healthAmount, 0, 193, 14);
+	rect<s32> healthDimensions = rect<s32>(0, 0, this->healthAmount, 14); //(this->healthAmount - this->minimalHealthAmount) / (this->maximalHealthAmount - this->minimalHealthAmount)
 
 	position2d<s32> healthBarPosition = position2d<s32>(10, 10);
 	position2d<s32> healthPosition = position2d<s32>(23, 24);

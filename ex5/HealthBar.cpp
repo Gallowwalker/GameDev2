@@ -1,14 +1,10 @@
 #include "HealthBar.h"
 
 #include <irrlicht.h>
-#include "driverChoice.h"
 
 using namespace irr;
 using namespace core;
-using namespace scene;
 using namespace video;
-using namespace io;
-using namespace gui;
 
 HealthBar::HealthBar() {
 
@@ -17,6 +13,8 @@ HealthBar::HealthBar() {
 HealthBar::HealthBar(IrrlichtDevice *device, IVideoDriver* driver) {
 	this->device = device;
 	this->driver = driver;
+	this->healthBarTexture = this->driver->getTexture(this->healthBarTextureLocation);
+	this->healthTexture = this->driver->getTexture(this->healthTextureLocation);
 }
 
 HealthBar::HealthBar(const HealthBar& orig) {
@@ -28,11 +26,6 @@ HealthBar::~HealthBar() {
 	this->driver = NULL;
 	this->healthBarTexture = NULL;
 	this->healthTexture = NULL;
-}
-
-void HealthBar::create() {
-	this->healthBarTexture = this->driver->getTexture(this->healthBarTextureLocation);
-	this->healthTexture = this->driver->getTexture(this->healthTextureLocation);
 }
 
 void HealthBar::draw() {
